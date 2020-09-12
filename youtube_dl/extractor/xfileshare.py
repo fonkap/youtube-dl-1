@@ -58,6 +58,7 @@ class XFileShareIE(InfoExtractor):
         (r'vidshare\.tv', 'VidShare'),
         (r'vup\.to', 'VUp'),
         (r'xvideosharing\.com', 'XVideoSharing'),
+        (r'supervideo\.tv', 'Supervideo'),
     )
 
     IE_DESC = 'XFileShare based sites: %s' % ', '.join(list(zip(*_SITES))[1])
@@ -121,7 +122,8 @@ class XFileShareIE(InfoExtractor):
              r'>Watch (.+)[ <]',
              r'<h2 class="video-page-head">([^<]+)</h2>',
              r'<h2 style="[^"]*color:#403f3d[^"]*"[^>]*>([^<]+)<',  # streamin.to
-             r'title\s*:\s*"([^"]+)"'),  # govid.me
+             r'title\s*:\s*"([^"]+)"',  # govid.me
+             r'<h1 class="download__title">([^<]+)</h1>'),  # supervideo.tv
             webpage, 'title', default=None) or self._og_search_title(
             webpage, default=None) or video_id).strip()
 

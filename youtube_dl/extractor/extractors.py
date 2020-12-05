@@ -46,6 +46,7 @@ from .allocine import AllocineIE
 from .aliexpress import AliExpressLiveIE
 from .apa import APAIE
 from .aparat import AparatIE
+from .aparatcam import AparatCamIE
 from .appleconnect import AppleConnectIE
 from .appletrailers import (
     AppleTrailersIE,

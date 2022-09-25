@@ -27,7 +27,7 @@ _bytes_to_chr = (lambda x: x) if sys.version_info[0] == 2 else (lambda x: map(ch
 class RTVEALaCartaIE(InfoExtractor):
     IE_NAME = 'rtve.es:alacarta'
     IE_DESC = 'RTVE a la carta'
-    _VALID_URL = r'https?://(?:www\.)?rtve\.es/(m/)?((alacarta|playz)/videos|filmoteca)/[^/]+/[^/]+/(?P<id>\d+)'
+    _VALID_URL = r'https?://(?:www\.)?rtve\.es/(m/)?((alacarta|playz|play)/videos|filmoteca)/[^/]+/[^/]+/(?P<id>\d+)'
 
     _TESTS = [{
         'url': 'http://www.rtve.es/alacarta/videos/balonmano/o-swiss-cup-masculina-final-espana-suecia/2491869/',
@@ -266,3 +266,39 @@ class RTVETelevisionIE(InfoExtractor):
                 'The webpage doesn\'t contain any video', expected=True)
 
         return self.url_result(alacarta_url, ie=RTVEALaCartaIE.ie_key())
+
+
+class RTVEPlayAudiosIE(InfoExtractor):
+    IE_NAME = 'rtve.es:audios'
+    _VALID_URL = r'https?://(?:www\.)?rtve\.es/(m/)?((alacarta|playz|play)/audios)/[^/]+/[^/]+/(?P<id>\d+)'
+
+    _TEST = {
+        'url': 'https://www.rtve.es/play/audios/musica-antigua/musica-antigua-chacona-indiana-amulatada-26-09-09/594024/',
+        'md5': '6c8de961923b7fcc15f718a3aec5b6b4',
+        'info_dict': {
+            'id': '594024',
+            'ext': 'mp3',
+            'title': 'La chacona I - 29/09/09',
+            'description': 'Música antigua - La chacona, una indiana amulatada I - 26/09/09'
+        }
+    }
+
+    def _real_extract(self, url):
+        video_id = self._match_id(url)
+        api_url = 'https://www.rtve.es/api/audios/' + video_id + '.json'
+        json = self._download_json(api_url, video_id)
+        item = json['page']['items'][0]
+        # TODO more code goes here, for example ...
+        title = item['shortTitle']
+        formats = list(map(lambda q: {
+            'url': q['filePath'],
+            'format_id': q['preset']
+        }, item['qualities']))
+
+        return {
+            'id': video_id,
+            'title': title,
+            'description': item['longTitle'],
+            'formats' : formats
+            # TODO more properties (see youtube_dl/extractor/common.py)
+        }

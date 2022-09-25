@@ -378,6 +378,7 @@ from .fc2 import (
     FC2EmbedIE,
 )
 from .fczenit import FczenitIE
+from .filemoon import FileMoonIE
 from .filmon import (
     FilmOnIE,
     FilmOnChannelIE,
@@ -787,6 +788,7 @@ from .nexx import (
     NexxIE,
     NexxEmbedIE,
 )
+from .nflfull import NflFullIE
 from .nfl import (
     NFLIE,
     NFLArticleIE,

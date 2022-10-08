@@ -1048,7 +1048,7 @@ from .rtl2 import (
 )
 from .rtp import RTPIE
 from .rts import RTSIE
-from .rtve import RTVEALaCartaIE, RTVELiveIE, RTVEInfantilIE, RTVELiveIE, RTVETelevisionIE, RTVEPlayAudiosIE
+from .rtve import RTVEPlayIE, RTVEInfantilIE, RTVELiveIE, RTVETelevisionIE, RTVEPlayAudiosIE
 from .rtvnh import RTVNHIE
 from .rtvs import RTVSIE
 from .ruhd import RUHDIE

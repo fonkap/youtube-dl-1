@@ -385,6 +385,7 @@ from .filmon import (
 )
 from .filmweb import FilmwebIE
 from .firsttv import FirstTVIE
+from .fishker import FishkerIE
 from .fivemin import FiveMinIE
 from .fivetv import FiveTVIE
 from .flickr import FlickrIE

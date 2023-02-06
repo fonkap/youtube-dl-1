@@ -1,20 +1,21 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import re
+
 from .common import InfoExtractor
-from .. import utils, compat
+from .. import utils
 from ..utils import js_to_json
 
 
 class FileMoonIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?filemoon\.sx/./(?P<id>.+)/(?P<title>.+)'
+    _VALID_URL = r'https?://(?:www\.)?filemoon\.sx/./(?P<id>\w+)(/(?P<title>.*))*'
     _TEST = {
-        # 'url': 'https://filemoon.sx/e/ashwd61m74ge/W02.Seahawks.vs.49ers.18-09-2022.mp4',
-        'url': 'https://filemoon.sx/d/e2l4uy8tiisg/sample_3840x2160.mkv',
-        'md5': '441f0a1b75e5fe42d762fc5e28c60146',
+        'url': 'https://filemoon.sx/e/dw40rxrzruqz',
+        'md5': '5a713742f57ac4aef29b74733e8dda01',
         'info_dict': {
-            'id': 'e2l4uy8tiisg',
-            'title': 'sample_3840x2160.mkv',
+            'id': 'dw40rxrzruqz',
+            'title': 'dw40rxrzruqz',
             'ext': 'mp4'
         }
     }
@@ -22,12 +23,14 @@ class FileMoonIE(InfoExtractor):
     def _real_extract(self, url):
         video_id = self._match_id(url)
         m = self._VALID_URL_RE.match(url)
-        title = compat.compat_str(m.group('title'))
+        title = m.group('title')
+        if not title:
+            title = video_id
 
         webpage = self._download_webpage(url, video_id)
-        packed = self._search_regex(r'(eval\(function.+)', webpage, 'packed code')
+        matches = re.findall(r'(eval.*?)<\/script>', webpage, flags=re.DOTALL)
+        packed = matches[-1]
         unpacked = utils.decode_packed_codes(packed)
-
         jwplayer_sources = self._parse_json(
             self._search_regex(
                 r"(?s)player\.setup\(\{sources:(.*?])", unpacked, 'jwplayer sources'),
